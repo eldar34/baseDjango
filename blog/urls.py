@@ -3,7 +3,7 @@ from . import views
 from django.contrib.auth import views as dcviews
 
 urlpatterns = [
-    path('', views.post_list, name='post_list'),
+    path('', views.PostList.as_view(), name='post_list'),
     path('post/<int:pk>/', views.post_detail, name='post_detail'),
     path('post/<int:pk>/update/', views.UpdatePost.as_view(), name='post_update'),
     path('post/registration/', views.post_registration, name='post_registration'),

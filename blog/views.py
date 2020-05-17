@@ -9,9 +9,15 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.views.generic import ListView
 
 
 # Create your views here.  
+
+class PostList(ListView):
+
+    model = Post
+    queryset = Post.objects.order_by('published_date')
 
 class CreatePost(LoginRequiredMixin, CreateView):
 
@@ -50,12 +56,6 @@ class DeletePost(LoginRequiredMixin, DeleteView):
     # template_name_suffix = '_edit_form'
     success_url = reverse_lazy('post_list')
 
-def post_list(request):
-    # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    posts = Post.objects.order_by('published_date')
-    return render(request, 'blog/post_list.html', {
-        'posts': posts
-    })
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
