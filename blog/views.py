@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
 
 # Create your views here.  
@@ -17,17 +17,27 @@ class CreatePost(LoginRequiredMixin, CreateView):
     login_url = 'post_login'
     
     model = Post
-    fields = ['title', 'text']
-    mypk = 1
-    
-    
+    fields = ['title', 'text']    
     template_name = "blog/forms/post_edit_form.html"
     # template_name_suffix = '_edit_form'
     
     def form_valid(self, form):
         form.instance.author = self.request.user
+        form.instance.published_date = timezone.now()        
+        return super().form_valid(form)
+
+class UpdatePost(LoginRequiredMixin, UpdateView):
+
+    login_url = 'post_login'
+
+    model = Post
+    fields = ['title', 'text']
+    template_name = "blog/forms/post_edit_form.html"
+    # template_name_suffix = '_edit_form'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
         form.instance.published_date = timezone.now()
-        
         return super().form_valid(form)
 
 def post_list(request):
