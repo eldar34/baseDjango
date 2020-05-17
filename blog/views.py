@@ -1,16 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from django.utils import timezone
-from .forms import PostForm, PostUser, PostAuth
-from django.contrib.auth import authenticate, login, logout
+from .forms import PostUser
+
 from django.http import HttpResponse
 from django.contrib import messages
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import UserCreationForm
 
 
 # Create your views here.  
@@ -65,19 +66,14 @@ class LoginPost(LoginView):
 class LogoutPost(LogoutView):
     template_name = 'blog/registration/post_login.html'
 
-def post_registration(request):
+class RegistrationPost(FormView):
 
-    if request.method == 'POST':
-        f = PostUser(request.POST)
-        if f.is_valid():
-            f.save()
-            messages.success(request, 'Account created successfully')
-            return redirect('post_registration')
- 
-    else:
-        f = PostUser()
+    template_name = 'blog/registration/post_registration.html'
+    form_class = PostUser
+    success_url = '/post/registration/'
 
-    return render(request, 'blog/registration/post_registration.html', {
-        'form': f
-    })
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, 'Account created successfully')
+        return super().form_valid(form)
 
