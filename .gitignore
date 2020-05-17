@@ -1,0 +1,14 @@
+# env file
+.env
+
+# env file
+/.idea
+.idea/*
+
+# For Python cashe
+blog/migrations/__pycache__/
+blog/__pycache__/
+mysite/__pycache__/
+copyvenv/
+staticfiles/
+instruction.txt

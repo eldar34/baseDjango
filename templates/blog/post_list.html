@@ -1,0 +1,30 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+{% for post in posts %}
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></div>
+                        
+                        <div class="card-body">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-4 offset-sm-4">
+                                        
+                                        <ul v-for="val in filterAccess">
+                                            
+                                            <li>Text: {{ post.text|linebreaksbr  }}</li>
+                                            <li>Published: {{ post.published_date }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                       
+
+                    </div>
+                </div>
+            </div>
+            <br>
+{% endfor %}
+{% endblock %}

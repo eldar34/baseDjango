@@ -1,0 +1,32 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block content %}
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></div>
+                        
+                        <div class="card-body">
+                            <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><img src="{% static 'img/pencil.png' %}"/></a>                            
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-4 offset-sm-4">
+                                        
+                                        <ul v-for="val in filterAccess">
+                                            
+                                            <li>Text: {{ post.text|linebreaksbr  }}</li>
+                                            <li>Published: {{ post.published_date }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                       
+
+                    </div>
+                </div>
+            </div>
+            <br>
+
+{% endblock %}
