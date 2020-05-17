@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.views import LoginView, LogoutView
 
 
 # Create your views here.  
@@ -58,21 +59,11 @@ class DeletePost(LoginRequiredMixin, DeleteView):
     # template_name_suffix = '_edit_form'
     success_url = reverse_lazy('post_list')
 
+class LoginPost(LoginView):
+    template_name = 'blog/registration/post_login.html'
 
-def post_edit(request, pk):
-
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+class LogoutPost(LogoutView):
+    template_name = 'blog/registration/post_login.html'
 
 def post_registration(request):
 
@@ -90,36 +81,3 @@ def post_registration(request):
         'form': f
     })
 
-def post_login(request):
-    
-    if request.method == 'POST':
-        
-        form = PostAuth(request.POST)
-        print(form.is_valid())
-        print('hello')
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(username=cd['username'], password=cd['password'])
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return redirect('post_list')
-                    # return HttpResponse('Authenticated successfully')
-                else:
-                    # return HttpResponse('Disabled account')
-                    messages.success(request, 'Disabled account')
-                    return redirect('post_login')                    
-            else:
-                # return HttpResponse('Invalid login')
-                messages.success(request, 'Invalid login')
-                return redirect('post_login') 
-    else:
-        form = PostAuth()
-
-    return render(request, 'blog/registration/post_login.html', {
-        'form': form
-    })
-
-def post_logout(request):
-    logout(request)
-    return redirect('post_list')
