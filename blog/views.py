@@ -6,8 +6,29 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib import messages
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView
+
 
 # Create your views here.  
+
+class CreatePost(LoginRequiredMixin, CreateView):
+
+    login_url = 'post_login'
+    
+    model = Post
+    fields = ['title', 'text']
+    mypk = 1
+    
+    
+    template_name = "blog/forms/post_edit_form.html"
+    # template_name_suffix = '_edit_form'
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.published_date = timezone.now()
+        
+        return super().form_valid(form)
 
 def post_list(request):
     # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -20,23 +41,6 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'blog/post_detail.html', {
         'post': post
-    })
-
-def post_new(request):
-
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm()
-
-    return render(request, 'blog/post_edit.html', {
-        'form': form
     })
 
 def post_edit(request, pk):

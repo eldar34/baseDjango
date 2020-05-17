@@ -13,7 +13,7 @@
 <body>
     <div>
         <h1><a href="{% url 'post_list' %}">Django Blog</a></h1>
-        <a href="{% url 'post_new' %}" class="top-menu">Create Post</a>
+        <a href="{% url 'post_create' %}" class="top-menu">Create Post</a>
         {% if request.user.is_authenticated %}
             <span>Hello {{ request.user.username }},</span>
             
