@@ -9,16 +9,18 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 # Create your views here.  
 
 class PostList(ListView):
-
     model = Post
     queryset = Post.objects.order_by('published_date')
 
+class PostDetail(DetailView):
+    model = Post
+    
 class CreatePost(LoginRequiredMixin, CreateView):
 
     login_url = 'post_login'
@@ -56,12 +58,6 @@ class DeletePost(LoginRequiredMixin, DeleteView):
     # template_name_suffix = '_edit_form'
     success_url = reverse_lazy('post_list')
 
-
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {
-        'post': post
-    })
 
 def post_edit(request, pk):
 
