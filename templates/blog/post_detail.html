@@ -9,6 +9,7 @@
                         
                         <div class="card-body">
                             <a class="btn btn-default" href="{% url 'post_update' pk=post.pk %}"><img src="{% static 'img/pencil.png' %}"/></a>                            
+                            <a class="btn btn-default" href="{% url 'post_delete' pk=post.pk %}"><img src="{% static 'img/trash.png' %}"/></a>                            
                             <form>
                                 <div class="form-row">
                                     <div class="form-group col-sm-4 offset-sm-4">

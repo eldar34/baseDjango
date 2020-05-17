@@ -7,7 +7,8 @@ from django.http import HttpResponse
 from django.contrib import messages
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 
 
 # Create your views here.  
@@ -39,6 +40,15 @@ class UpdatePost(LoginRequiredMixin, UpdateView):
         form.instance.author = self.request.user
         form.instance.published_date = timezone.now()
         return super().form_valid(form)
+
+class DeletePost(LoginRequiredMixin, DeleteView):
+
+    login_url = 'post_login'
+
+    model = Post
+    template_name = "blog/forms/post_delete_form.html"
+    # template_name_suffix = '_edit_form'
+    success_url = reverse_lazy('post_list')
 
 def post_list(request):
     # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')

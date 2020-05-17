@@ -1,0 +1,45 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Delete form - {{ block.super }}
+{% endblock %}
+ 
+{% block content %}
+ 
+     <div class="login">
+ 
+         {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Delete</div>
+                    
+                    <div class="card-body">                                                   
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="form-group col-sm-4 offset-sm-4">                                    
+                                    <p>Are you sure you want to delete "{{ object }}"?</p>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                   
+
+                </div>
+            </div>
+        </div>
+ 
+        
+     </div>
+ 
+{% endblock %}
