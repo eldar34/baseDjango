@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from django.utils import timezone
-from .forms import PostUser
+from .forms import PostRegistration
 
 from django.http import HttpResponse
 from django.contrib import messages
@@ -12,7 +12,6 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, FormView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
-
 
 # Create your views here.  
 
@@ -70,11 +69,10 @@ class LogoutPost(LogoutView):
 class RegistrationPost(FormView):
 
     template_name = 'blog/registration/post_registration.html'
-    form_class = PostUser
+    form_class = PostRegistration
     success_url = '/post/registration/'
 
     def form_valid(self, form):
         form.save()
         messages.success(self.request, 'Account created successfully')
         return super().form_valid(form)
-
