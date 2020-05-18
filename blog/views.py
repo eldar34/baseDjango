@@ -18,6 +18,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 class PostList(ListView):
     model = Post
+    paginate_by = 2
     queryset = Post.objects.order_by('published_date')
 
 class PostDetail(DetailView):

@@ -11,21 +11,8 @@
     <title>{% block title %} Document {% endblock %}</title>
 </head>
 <body>
-    <div>
-        <h1><a href="{% url 'post_list' %}">Django Blog</a></h1>
-        <a href="{% url 'post_create' %}" class="top-menu">Create Post</a>
-        {% if request.user.is_authenticated %}
-            <span>Hello {{ request.user.username }},</span>
-            
-            <a href="{% url 'post_logout' %}" class="top-menu">Logout</a>
-            
-        {% else %}
-            <a href="{% url 'post_registration' %}" class="top-menu">Registration</a>
-            <a href="{% url 'post_login' %}" class="top-menu">Authentication</a>
-        {% endif %}
-        
-        
-        
+    <div class="mb-5">       
+        {% include 'include/menu.html' %}
     </div>
     
         <div class="container">
