@@ -21,7 +21,13 @@
             {% endblock %}
         </div>
 
-        {% block footer %}
+        <div class="mb-4 fixed-bottom d-flex justify-content-center">
+            {% block footer %}
+
+            {% endblock %}                
+        </div>
+        
+        {% block beforbody %}
         <script type="text/javascript" src="{% static 'js/jquery-3.4.1.js' %}"></script> 
         <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script> 
         {% endblock %}
