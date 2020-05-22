@@ -1,3 +1,7 @@
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect
+
 class AjaxableResponseMixin:
     """
     Mixin to add AJAX support to a form.
@@ -22,3 +26,20 @@ class AjaxableResponseMixin:
             return JsonResponse(data)
         else:
             return response
+
+class AuthorPermissionMixin:
+
+    def has_permission(self):
+        currentUser = self.request.user
+        superuser = User.objects.filter(username=currentUser, is_superuser=1).exists()
+        self.get_object().author == currentUser
+        if superuser or currentUser == self.get_object().author:
+            return True 
+        else:
+            return False
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not self.has_permission():
+            messages.success(self.request, 'Permission denied')
+            return redirect('/post/{}/'.format(self.get_object().pk))
+        return super().dispatch(request, *args, **kwargs)

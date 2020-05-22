@@ -1,17 +1,19 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post
 from django.utils import timezone
-from .forms import PostRegistration
-
+from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.contrib import messages
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, FormView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, FormView
+
+from .models import Post
+from .forms import PostRegistration
+from .utils import AuthorPermissionMixin
+
 
 # Create your views here.  
 
@@ -37,7 +39,7 @@ class CreatePost(LoginRequiredMixin, CreateView):
         form.instance.published_date = timezone.now()        
         return super().form_valid(form)
 
-class UpdatePost(LoginRequiredMixin, UpdateView):
+class UpdatePost(AuthorPermissionMixin, UpdateView):
 
     login_url = 'post_login'
 
@@ -51,7 +53,7 @@ class UpdatePost(LoginRequiredMixin, UpdateView):
         form.instance.published_date = timezone.now()
         return super().form_valid(form)
 
-class DeletePost(LoginRequiredMixin, DeleteView):
+class DeletePost(AuthorPermissionMixin, DeleteView):
 
     login_url = 'post_login'
 
