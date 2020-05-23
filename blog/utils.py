@@ -30,13 +30,7 @@ class AjaxableResponseMixin:
 class AuthorPermissionMixin:
 
     def has_permission(self):
-        currentUser = self.request.user
-        superuser = User.objects.filter(username=currentUser, is_superuser=1).exists()
-        self.get_object().author == currentUser
-        if superuser or currentUser == self.get_object().author:
-            return True 
-        else:
-            return False
+        return bool(self.request.user.is_superuser or self.request.user == self.get_object().author)
     
     def dispatch(self, request, *args, **kwargs):
         if not self.has_permission():
