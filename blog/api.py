@@ -26,6 +26,7 @@ class PostViewSet(viewsets.ViewSet):
 
 class PostReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Post.objects.all()
+    permission_classes=[permissions.IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'list':

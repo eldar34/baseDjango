@@ -14,6 +14,7 @@ import os
 import environ
 # Configure Django App for Heroku.
 import django_heroku
+from django.utils.timezone import timedelta
 
 
 
@@ -53,6 +54,8 @@ INSTALLED_APPS = [
     'blog',
     'crispy_forms',
     'rest_framework',
+    'djoser',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -106,11 +109,55 @@ if(env.bool('LOCAL_ENV', True)):
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 2
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': env.str('SECRET_KEY'),
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+#smtp
+EMAIL_USE_SSL = env.bool('SMTP_EMAIL_USE_SSL', False)
+EMAIL_HOST = env.str('SMTP_EMAIL_HOST')
+EMAIL_HOST_USER = env.str('SMTP_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('SMTP_EMAIL_HOST_PASSWORD')
+EMAIL_PORT = env.int('SMTP_EMAIL_PORT')
+DEFAULT_FROM_EMAIL = env.str('SMTP_DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = env.str('SMTP_SERVER_EMAIL')
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': env.bool('DJOSER_SEND_ACTIVATION_EMAIL', False),
+    'SERIALIZERS': {},
 }
 
 # Password validation
@@ -157,10 +204,12 @@ LOGOUT_REDIRECT_URL = 'post_list'
 
 STATIC_URL = '/static/'
 
-""" STATIC_DIR = os.path.join(BASE_DIR, 'static')
+""" 
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (                                                           
     os.path.join(BASE_DIR, 'static'),                                          
-) """
+) 
+"""
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

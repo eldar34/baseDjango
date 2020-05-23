@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
+from rest_framework.permissions import BasePermission 
 
 class AjaxableResponseMixin:
     """
@@ -37,3 +38,17 @@ class AuthorPermissionMixin:
             messages.success(self.request, 'Permission denied')
             return redirect('/post/{}/'.format(self.get_object().pk))
         return super().dispatch(request, *args, **kwargs)
+
+class AuthorApiPermissionMixin(BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        # if request.method in permissions.SAFE_METHODS:
+        #     return True
+
+        # Write permissions are only allowed to the owner of the snippet.
+        return obj.author == request.user
+    
+    # def has_permission(self, request, view):
+    #     return bool(self.request.user.is_superuser or self.request.user == self.get_object().author)
