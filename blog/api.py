@@ -12,21 +12,6 @@ from .serializers import (
     PostEditSerializer
 )
 
-class PostViewSet(viewsets.ViewSet):
-    queryset = Post.objects.all()
-    permission_classes = [permissions.AllowAny]
-    paginate_by = 2
-    def list(self, request):
-        queryset = Post.objects.all()
-        serializer = PostListSerializer(queryset, many=True)
-        return Response(serializer.data)
-    
-    def retrieve(self, request, pk=None):
-        queryset = Post.objects.all()
-        post = get_object_or_404(queryset, pk=pk)
-        serializer = PostDetailSerializer(post)
-        return Response(serializer.data)
-
 class PostReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Post.objects.all()
     permission_classes=[permissions.AllowAny]
@@ -37,23 +22,15 @@ class PostReadViewSet(viewsets.ReadOnlyModelViewSet):
         elif self.action == 'retrieve':
             return PostDetailSerializer
 
-class PostChangeViewSet(viewsets.ModelViewSet):
 
-    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated, AuthorApiPermissionMixin])
-    def update_post(self, request, pk=None):
-        queryset = Post.objects.all()
-        post = Post.objects.get(queryset, id=pk)
-        serializer = PostEditSerializer(post)
-        return Response(serializer.data)
-
-class PostCreateViewSet(CreateAPIView):
+class PostCreateGeneric(CreateAPIView):
     serializer_class = PostEditSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-class PostEditViewSet(UpdateAPIView):
+class PostEditGeneric(UpdateAPIView):
     # queryset = Post.objects.all()
     serializer_class = PostEditSerializer
     permission_classes = [AuthorApiPermissionMixin]
@@ -63,7 +40,7 @@ class PostEditViewSet(UpdateAPIView):
         post = Post.objects.filter(id=pk)
         return post
 
-class PostDeleteViewSet(DestroyAPIView):
+class PostDeleteGeneric(DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostEditSerializer
     permission_classes = [AuthorApiPermissionMixin]

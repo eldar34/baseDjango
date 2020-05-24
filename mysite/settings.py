@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'rest_framework.authtoken',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,16 @@ DJOSER = {
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': env.bool('DJOSER_SEND_ACTIVATION_EMAIL', False),
     'SERIALIZERS': {},
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+    'LOGIN_URL' : 'post_login',
+    'LOGOUT_URL' : 'post_list',
 }
 
 # Password validation
