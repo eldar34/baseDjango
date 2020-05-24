@@ -15,6 +15,9 @@ urlpatterns = format_suffix_patterns([
     path('post/<int:pk>/delete/', views.DeletePost.as_view(), name='post_delete'),
     path('api/v1/post/', api.PostReadViewSet.as_view({'get': 'list'}), name='post_view_set'),
     path('api/v1/post/<int:pk>', api.PostReadViewSet.as_view({'get': 'retrieve'}), name='post_retrieve'),
+    path('api/v1/post/update/<int:pk>', api.PostEditViewSet.as_view(), name='post_api_update'),
+    path('api/v1/post/create/', api.PostCreateViewSet.as_view(), name='post_api_create'),
+    path('api/v1/post/delete/<int:pk>', api.PostDeleteViewSet.as_view(), name='post_api_delete'),
     
 ])
 

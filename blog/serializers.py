@@ -10,8 +10,15 @@ class PostListSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'author')
 
 class PostDetailSerializer(serializers.ModelSerializer):
-    """ Full information about actor"""
+    """ Full information about actor """
 
     class Meta:
         model = Post
         fields = "__all__"
+
+class PostEditSerializer(serializers.ModelSerializer):
+    """ Edit Post List """
+
+    class Meta:
+        model = Post
+        fields = ('title', 'text')
