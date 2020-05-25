@@ -33,7 +33,7 @@ class PostCreateGeneric(CreateAPIView):
 class PostEditGeneric(UpdateAPIView):
     # queryset = Post.objects.all()
     serializer_class = PostEditSerializer
-    permission_classes = [AuthorApiPermissionMixin]
+    permission_classes = [permissions.IsAuthenticated, AuthorApiPermissionMixin]
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')
@@ -43,4 +43,4 @@ class PostEditGeneric(UpdateAPIView):
 class PostDeleteGeneric(DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostEditSerializer
-    permission_classes = [AuthorApiPermissionMixin]
+    permission_classes = [permissions.IsAuthenticated, AuthorApiPermissionMixin]

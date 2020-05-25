@@ -100,9 +100,9 @@ if(env.bool('LOCAL_ENV', True)):
             {
                 'ENGINE': 'django.db.backends.postgresql_psycopg2',
                 'NAME': env.str('DB_NAME', default='django_db'),
-                'USER' : env.str('DB_USERNAME', default='el_da'),
-                'PASSWORD' : env.str('DB_PASSWORD', default='12345'),
-                'HOST' : env.str('DB_HOST', default='127.0.0.1'),
+                'USER' : env.str('DB_USERNAME', default='django_db'),
+                'PASSWORD' : env.str('DB_PASSWORD', default='django_db'),
+                'HOST' : env.str('DB_HOST', default='localhost'),
                 'PORT' : '5432',
             }
     }
@@ -150,8 +150,8 @@ EMAIL_HOST = env.str('SMTP_EMAIL_HOST')
 EMAIL_HOST_USER = env.str('SMTP_EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env.str('SMTP_EMAIL_HOST_PASSWORD')
 EMAIL_PORT = env.int('SMTP_EMAIL_PORT')
-DEFAULT_FROM_EMAIL = env.str('SMTP_DEFAULT_FROM_EMAIL')
-SERVER_EMAIL = env.str('SMTP_SERVER_EMAIL')
+DEFAULT_FROM_EMAIL = env.str('SMTP_EMAIL_HOST_USER')
+SERVER_EMAIL = env.str('SMTP_EMAIL_HOST_USER')
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',

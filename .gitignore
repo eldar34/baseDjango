@@ -4,6 +4,7 @@
 # env file
 /.idea
 .idea/*
+.vscode/
 
 # For Python cashe
 blog/migrations/__pycache__/
