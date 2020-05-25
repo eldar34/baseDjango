@@ -12,6 +12,7 @@ urlpatterns = format_suffix_patterns([
     path('post/logout/', views.LogoutPost.as_view(), name='post_logout'),
     path('post/create/', views.CreatePost.as_view(), name='post_create'),
     path('post/<int:pk>/delete/', views.DeletePost.as_view(), name='post_delete'),
+    path('registration-api/activate/<str:uid>/<str:token>/', views.UserActivationView.as_view()),
     
     path('api/v1/post/', api.PostReadViewSet.as_view({'get': 'list'}), name='post_view_set'),
     path('api/v1/post/<int:pk>', api.PostReadViewSet.as_view({'get': 'retrieve'}), name='post_retrieve'),

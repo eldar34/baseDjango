@@ -2,6 +2,11 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework.permissions import BasePermission 
+from django.contrib.auth.tokens import default_token_generator 
+from django.contrib.auth import login
+from django.utils.encoding import force_text 
+from django.utils.http import urlsafe_base64_decode
+from django.http import JsonResponse
 
 class AjaxableResponseMixin:
     """
@@ -52,3 +57,23 @@ class AuthorApiPermissionMixin(BasePermission):
     
     # def has_permission(self, request, view):
     #     return bool(self.request.user.is_superuser or self.request.user == self.get_object().author)
+
+class ApiEmailConfirm:
+    """ Activate user """
+
+    def chekUser(self, request, uidb64=None, token=None):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            print(uid)
+            user = User.objects.get(pk=uid)
+            print(uid)
+        except User.DoesNotExist:
+            user = None
+        if user and default_token_generator.check_token(user, token):
+            user.is_email_verified = True
+            user.is_active = True
+            user.save()
+            login(request, user)
+            print("Activaton done")
+        else:
+            print("Activation failed")

@@ -156,7 +156,7 @@ SERVER_EMAIL = env.str('SMTP_SERVER_EMAIL')
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'ACTIVATION_URL': 'registration-api/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': env.bool('DJOSER_SEND_ACTIVATION_EMAIL', False),
     'SERIALIZERS': {},
 }
